@@ -132,14 +132,13 @@
       <div id="status" class="status" aria-live="polite"></div>
     </form>
 
-    <p class="note">Important: replace the placeholder URL inside the script with your deployed Google Apps Script Web App URL or your local proxy URL during development.</p>
+    <p class="note">Important: replace the placeholder URL inside the script with your deployed Google Apps Script Web App URL, and keep the Vercel proxy in place for browser compatibility.</p>
   </div>
 
   <script>
-    // Set this to your Google Apps Script Web App URL or local proxy URL.
-    // Use the direct Apps Script URL after deploying with "Anyone" access,
-    // or use the local proxy below for localhost development.
-    const GAS_URL = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
+    // Point this to your Vercel proxy endpoint.
+    // The proxy forwards the request to your Apps Script web app and adds CORS headers.
+    const GAS_URL = 'https://test-app-sigma-puce.vercel.app/api/proxy?url=https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
 
     const form = document.getElementById('contactForm');
     const statusEl = document.getElementById('status');
