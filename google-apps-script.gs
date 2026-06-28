@@ -35,8 +35,7 @@ function doPost(e){
     var sheet = ss.getSheetByName('Members');
     if(!sheet){
       sheet = ss.insertSheet('Members');
-      // Header row
-      sheet.appendRow(['Timestamp','First Name','Last Name','Phone','Email','Address','Birthday','Notes','Is Scout','Scout Ranks','Scout Years','Scout Activities','Skills','Hobbies','Why Join','Contributions','Can Commit','Other Info','Agreement Name','Agreement Signature','Agreement Date']);
+      sheet.appendRow(['Timestamp','First Name','Last Name','Email']);
     }
 
     var timestamp = new Date();
@@ -44,24 +43,7 @@ function doPost(e){
       timestamp,
       data.firstName || '',
       data.lastName || '',
-      data.phone || '',
-      data.email || '',
-      data.address || '',
-      data.birthday || '',
-      data.notes || '',
-      (data.scout && typeof data.scout.isMember !== 'undefined') ? String(data.scout.isMember) : '',
-      (data.scout && data.scout.ranks) ? (Array.isArray(data.scout.ranks) ? data.scout.ranks.join(', ') : data.scout.ranks) : '',
-      (data.scout && data.scout.years) ? data.scout.years : '',
-      (data.scout && data.scout.activities) ? data.scout.activities : '',
-      (data.skills) ? (Array.isArray(data.skills) ? data.skills.join(', ') : data.skills) : '',
-      (data.hobbies) ? data.hobbies : '',
-      (data.questions && data.questions.whyJoin) ? data.questions.whyJoin : '',
-      (data.questions && data.questions.contribute) ? data.questions.contribute : '',
-      (data.questions && data.questions.canCommit) ? data.questions.canCommit : '',
-      (data.questions && data.questions.otherInfo) ? data.questions.otherInfo : '',
-      (data.agreement && data.agreement.name) ? data.agreement.name : '',
-      (data.agreement && data.agreement.signature) ? data.agreement.signature : '',
-      (data.agreement && data.agreement.date) ? data.agreement.date : ''
+      data.email || ''
     ]);
 
     var output = ContentService.createTextOutput(JSON.stringify({status:'success'}));
