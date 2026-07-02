@@ -18,32 +18,18 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    let url = targetUrl;
-    let response;
+    const upstreamResponse = await fetch(targetUrl, {
+      method: req.method,
+      headers: {
+        'Content-Type': req.headers['content-type'] || 'application/json',
+        ...(req.headers.authorization ? { Authorization: req.headers.authorization } : {})
+      },
+      body,
+    });
 
-    // Follow redirects manually to preserve POST method and body.
-    // Default fetch behavior changes POST to GET on 302, which drops the body.
-    for (let i = 0; i < 5; i++) {
-      response = await fetch(url, {
-        method: req.method,
-        headers: {
-          'Content-Type': req.headers['content-type'] || 'application/json',
-        },
-        body: req.method !== 'GET' ? body : undefined,
-        redirect: 'manual',
-      });
-
-      const location = response.headers.get('location');
-      if (location && response.status >= 300 && response.status < 400) {
-        url = location;
-        continue;
-      }
-      break;
-    }
-
-    const responseText = await response.text();
-    res.status(response.status);
-    res.setHeader('Content-Type', response.headers.get('content-type') || 'application/json');
+    const responseText = await upstreamResponse.text();
+    res.status(upstreamResponse.status);
+    res.setHeader('Content-Type', upstreamResponse.headers.get('content-type') || 'application/json');
     res.send(responseText);
   } catch (error) {
     console.error(error);
